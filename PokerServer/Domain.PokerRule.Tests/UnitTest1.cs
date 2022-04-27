@@ -1,7 +1,7 @@
 using System;
 using Xunit;
 
-namespace Domain.Tests
+namespace Domain.PokerRule.Tests
 {
     public class UnitTest1
     {
