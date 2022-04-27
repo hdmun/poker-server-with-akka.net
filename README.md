@@ -1,4 +1,9 @@
-# poker-server-with-akka.net
+ï»¿# poker-server-with-akka.net
 
-Æ÷Ä¿ °ÔÀÓÁß °¡Àå ÀÎ±âÀÖ´Â ÅØ»ç½º È¦´ıÀ» `Akka.NET`À¸·Î ±¸ÇöÇÏ´Â ÇÁ·ÎÁ§Æ® ÀÔ´Ï´Ù.
+í¬ì»¤ ê²Œì„ì¤‘ ê°€ì¥ ì¸ê¸°ìˆëŠ” í…ì‚¬ìŠ¤ í™€ë¤ ì„œë²„ë¥¼ `Akka.NET`ìœ¼ë¡œ êµ¬í˜„í•˜ëŠ” í”„ë¡œì íŠ¸ ì…ë‹ˆë‹¤.
 
+
+## References
+
+- Akka.NET ìœ¼ë¡œ ë§Œë“œëŠ” ì˜¨ë¼ì¸ ê²Œì„ ì„œë²„, NDC2016
+- https://github.com/SaladLab/TicTacToe
