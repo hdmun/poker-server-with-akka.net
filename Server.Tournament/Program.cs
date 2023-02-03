@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Client.Dummy
+namespace Server.Tournament
 {
     class Program
     {

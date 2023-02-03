@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PokerServer
+namespace Server.RingGame6Max
 {
     class Program
     {

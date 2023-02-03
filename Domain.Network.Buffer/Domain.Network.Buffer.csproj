@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Game\" />
+    <ProjectReference Include="..\Domain.Network\Domain.Network.csproj" />
   </ItemGroup>
 
 </Project>
