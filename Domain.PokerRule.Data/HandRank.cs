@@ -1,6 +1,6 @@
 ﻿namespace Domain.PokerRule.Data
 {
-    public enum HandRanks
+    public enum HandRank : byte
     {
         HighCard = 0,
         Pair = 1,

@@ -1,6 +1,6 @@
 ﻿namespace Domain.PokerRule.Data
 {
-    public enum Shapes
+    public enum Shape : int
     {
         Clubs = 0,
         Hearts = 1,
