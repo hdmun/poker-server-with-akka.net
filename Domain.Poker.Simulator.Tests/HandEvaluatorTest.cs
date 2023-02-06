@@ -1,4 +1,5 @@
-﻿using Domain.PokerRule.Data;
+﻿using Domain.Poker.Simulator.Model;
+using Domain.PokerRule.Data;
 using System.Collections.Generic;
 using System.Linq;
 using Xunit;
@@ -22,10 +23,12 @@ namespace Domain.Poker.Simulator.Tests
 
             // when
             var evaluator = HandEvaluator.From();
-            var handRank = evaluator.Evaluate(shared | playerCards);
+            var handValue = evaluator.Evaluate(shared | playerCards);
 
             // then
-            Assert.Equal(HandRank.StraightFlush, handRank);
+            Assert.Equal(HandRank.StraightFlush, handValue.Rank);
+            Assert.Equal(10UL, handValue.Priority);
+            Assert.Equal(0UL, handValue.Kickers);
         }
 
         [Fact]
@@ -34,19 +37,21 @@ namespace Domain.Poker.Simulator.Tests
             // given
             ulong shared = Card.Get(Rank.Queen, Shape.Hearts).ToBitMask()
                 | Card.Get(Rank.Eight, Shape.Hearts).ToBitMask()
-                | Card.Get(Rank.Ten, Shape.Clubs).ToBitMask()
                 | Card.Get(Rank.Five, Shape.Hearts).ToBitMask()
-                | Card.Get(Rank.Two, Shape.Hearts).ToBitMask();
+                | Card.Get(Rank.Two, Shape.Hearts).ToBitMask()
+                | Card.Get(Rank.Ten, Shape.Clubs).ToBitMask();
             ulong playerCards
                 = Card.Get(Rank.Ace, Shape.Hearts).ToBitMask()
                 | Card.Get(Rank.King, Shape.Hearts).ToBitMask();
 
             // when
             var evaluator = HandEvaluator.From();
-            var handRank = evaluator.Evaluate(shared | playerCards);
+            var handValue = evaluator.Evaluate(shared | playerCards);
 
             // then
-            Assert.Equal(HandRank.Flush, handRank);
+            Assert.Equal(HandRank.Flush, handValue.Rank);
+            Assert.Equal(0UL, handValue.Priority);
+            Assert.Equal(0b1_1100_0100_1001UL, handValue.Kickers);
         }
 
         [Fact]
@@ -64,10 +69,12 @@ namespace Domain.Poker.Simulator.Tests
 
             // when
             var evaluator = HandEvaluator.From();
-            var handRank = evaluator.Evaluate(shared | playerCards);
+            var handValue = evaluator.Evaluate(shared | playerCards);
 
             // then
-            Assert.Equal(HandRank.Straight, handRank);
+            Assert.Equal(HandRank.Straight, handValue.Rank);
+            Assert.Equal(10UL, handValue.Priority);
+            Assert.Equal(0UL, handValue.Kickers);
         }
 
         [Fact]
@@ -87,10 +94,12 @@ namespace Domain.Poker.Simulator.Tests
 
             // when
             var evaluator = HandEvaluator.From();
-            var handRank = evaluator.Evaluate(cardsMask);
+            var handValue = evaluator.Evaluate(cardsMask);
 
             // then
-            Assert.Equal(HandRank.FullHouse, handRank);
+            Assert.Equal(HandRank.FullHouse, handValue.Rank);
+            Assert.Equal(0b1_0000_0000_0000UL, handValue.Priority);
+            Assert.Equal(0b0_1000_0000_0000UL, handValue.Kickers);
         }
 
 
@@ -126,10 +135,12 @@ namespace Domain.Poker.Simulator.Tests
 
             // when
             var evaluator = HandEvaluator.From();
-            var handRank = evaluator.Evaluate(cardsMask);
+            var handValue = evaluator.Evaluate(cardsMask);
 
             // then
-            Assert.Equal(HandRank.FourOfAKind, handRank);
+            Assert.Equal(HandRank.FourOfAKind, handValue.Rank);
+            Assert.Equal(0b0_1000_0000_0000UL, handValue.Priority);
+            Assert.Equal(0b1_0000_0000_0000UL, handValue.Kickers);
         }
 
         [Fact]
@@ -147,22 +158,24 @@ namespace Domain.Poker.Simulator.Tests
 
             // when
             var evaluator = HandEvaluator.From();
-            var handRank = evaluator.Evaluate(shared | playerCards);
+            var handValue = evaluator.Evaluate(shared | playerCards);
 
             // then
-            Assert.Equal(HandRank.Trips, handRank);
+            Assert.Equal(HandRank.Trips, handValue.Rank);
+            Assert.Equal(0b0_0001_0000_0000UL, handValue.Priority);
+            Assert.Equal(0b1_1000_0000_0000UL, handValue.Kickers);
         }
 
         public static IEnumerable<object[]> TwoPairData()
         {
             yield return new Card[] {
                 Card.Get(Rank.Ace, Shape.Diamonds),
-                Card.Get(Rank.Queen, Shape.Diamonds),
+                Card.Get(Rank.Ace, Shape.Hearts),
                 Card.Get(Rank.King, Shape.Clubs),
+                Card.Get(Rank.King, Shape.Hearts),
+                Card.Get(Rank.Queen, Shape.Diamonds),
                 Card.Get(Rank.Five, Shape.Clubs),
                 Card.Get(Rank.Two, Shape.Hearts),
-                Card.Get(Rank.Ace, Shape.Hearts),
-                Card.Get(Rank.King, Shape.Hearts)
             };
             yield return new Card[] {
                 Card.Get(Rank.Ace, Shape.Diamonds),
@@ -171,7 +184,7 @@ namespace Domain.Poker.Simulator.Tests
                 Card.Get(Rank.King, Shape.Diamonds),
                 Card.Get(Rank.Two, Shape.Hearts),
                 Card.Get(Rank.Two, Shape.Spades),
-                Card.Get(Rank.Jack, Shape.Clubs)
+                Card.Get(Rank.Queen, Shape.Clubs)
             };
         }
 
@@ -185,10 +198,12 @@ namespace Domain.Poker.Simulator.Tests
 
             // when
             var evaluator = HandEvaluator.From();
-            var handRank = evaluator.Evaluate(cardsMask);
+            var handValue = evaluator.Evaluate(cardsMask);
 
             // then
-            Assert.Equal(HandRank.TwoPair, handRank);
+            Assert.Equal(HandRank.TwoPair, handValue.Rank);
+            Assert.Equal(0b1_1000_0000_0000UL, handValue.Priority);
+            Assert.Equal(0b0_0100_0000_0000UL, handValue.Kickers);
         }
 
         [Fact]
@@ -206,20 +221,21 @@ namespace Domain.Poker.Simulator.Tests
 
             // when
             var evaluator = HandEvaluator.From();
-            var handRank = evaluator.Evaluate(shared | playerCards);
+            var handValue = evaluator.Evaluate(shared | playerCards);
 
             // then
-            Assert.Equal(HandRank.Pair, handRank);
+            Assert.Equal(HandRank.Pair, handValue.Rank);
+            Assert.Equal(0b1_0000_0000_0000UL, handValue.Priority);
+            Assert.Equal(0b0_1101_0000_0000UL, handValue.Kickers);
         }
-
 
         [Fact]
         public void Evaluate_HighCard_Test()
         {
             // given
-            ulong shared = Card.Get(Rank.Nine, Shape.Diamonds).ToBitMask()
-                | Card.Get(Rank.Queen, Shape.Diamonds).ToBitMask()
+            ulong shared = Card.Get(Rank.Queen, Shape.Diamonds).ToBitMask()
                 | Card.Get(Rank.Ten, Shape.Clubs).ToBitMask()
+                | Card.Get(Rank.Nine, Shape.Diamonds).ToBitMask()
                 | Card.Get(Rank.Five, Shape.Clubs).ToBitMask()
                 | Card.Get(Rank.Two, Shape.Hearts).ToBitMask();
             ulong playerCards
@@ -228,10 +244,12 @@ namespace Domain.Poker.Simulator.Tests
 
             // when
             var evaluator = HandEvaluator.From();
-            var handRank = evaluator.Evaluate(shared | playerCards);
+            var handValue = evaluator.Evaluate(shared | playerCards);
 
             // then
-            Assert.Equal(HandRank.HighCard, handRank);
+            Assert.Equal(HandRank.HighCard, handValue.Rank);
+            Assert.Equal(0UL, handValue.Priority);
+            Assert.Equal(0b1_1101_1000_0000UL, handValue.Kickers); ;
         }
     }
 }
