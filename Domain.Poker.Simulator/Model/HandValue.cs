@@ -21,5 +21,42 @@ namespace Domain.Poker.Simulator.Model
         public HandRank Rank { get => (HandRank)_rank; }
         public uint Priority { get => _priority; }
         public uint Kickers { get => _kickers; }
+
+        public static bool operator ==(HandValue leftHand, HandValue rightHand)
+        {
+            return leftHand.Rank == rightHand.Rank
+                && leftHand.Priority == rightHand.Priority
+                && leftHand.Kickers == rightHand.Kickers;
+        }
+
+        public static bool operator !=(HandValue leftHand, HandValue rightHand)
+        {
+            return !(leftHand == rightHand);
+        }
+
+        public static bool operator >(HandValue leftHand, HandValue rightHand)
+        {
+            if (leftHand.Rank > rightHand.Rank)
+                return true;
+            else if (leftHand.Rank < rightHand.Rank)
+                return false;
+
+            if (leftHand.Priority > rightHand.Priority)
+                return true;
+            else if (leftHand.Priority < rightHand.Priority)
+                return false;
+
+            if (leftHand.Kickers > rightHand.Kickers)
+                return true;
+            else if (leftHand.Kickers < rightHand.Kickers)
+                return false;
+
+            return false;
+        }
+
+        public static bool operator <(HandValue leftHand, HandValue rightHand)
+        {
+            return !(leftHand > rightHand);
+        }
     }
 }
