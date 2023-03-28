@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Server.RingGame6Max
+namespace Server.Poker
 {
-    class Program
+    internal class Program
     {
         static void Main(string[] args)
         {
