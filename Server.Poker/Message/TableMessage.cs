@@ -26,4 +26,21 @@
         public int PlayerId { get; set; }
         public int BuyInStack { get; set; }
     }
+
+    public class TableBetMessage
+    {
+        public int BettingChip { get; set; }
+    }
+
+    public class TableFoldMessage
+    {
+    }
+
+    public class TableUpdateMessage
+    {
+    }
+    
+    public class TableStartGameMessage
+    {
+    }
 }
