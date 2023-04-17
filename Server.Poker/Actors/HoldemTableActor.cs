@@ -7,10 +7,10 @@ using System.Linq;
 
 namespace Server.Poker.Actors
 {
+    public class HoldemTableActor : ReceiveActor, IWithTimers
     {
+        public ITimerScheduler Timers { get; set; }
 
-    public class HoldemTableActor : ReceiveActor
-    {
         private readonly List<TablePlayerComponent> _players;
         private readonly HashSet<int> _watchers;
 
@@ -30,6 +30,10 @@ namespace Server.Poker.Actors
             Receive<TableStartGameMessage>(OnStartGame);
         }
 
+        protected override void PreStart()
+        {
+            Timers.StartPeriodicTimer("update", new TableUpdateMessage(), TimeSpan.FromSeconds(0.1), TimeSpan.FromSeconds(0.1));
+        }
 
         private bool IsSit(int playerId)
             => _players.Any(player => player.Id == playerId);
