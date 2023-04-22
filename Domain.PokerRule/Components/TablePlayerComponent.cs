@@ -5,15 +5,18 @@ namespace Domain.PokerRule.Components
     public class TablePlayerComponent
     {
         public int Id { get; private set; }
-        public int Stack { get; set; }
-        public int BetChips { get; set; }
-        public TablePlayerAction LastAction { get; set; }
+        public required int Stack { get; set; }
+        public required int BetChips { get; set; }
+        public required TablePlayerAction LastAction { get; set; }
 
-        public static TablePlayerComponent Of(int id)
+        public static TablePlayerComponent Of(int playerId)
         {
             return new TablePlayerComponent
             {
-                Id = id,
+                Id = playerId,
+                Stack = 0,
+                BetChips = 0,
+                LastAction = TablePlayerAction.None,
             };
         }
     }

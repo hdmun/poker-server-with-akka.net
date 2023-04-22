@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Interface\" />
+    <ProjectReference Include="..\Domain.PokerRule.Data\Domain.PokerRule.Data.csproj" />
   </ItemGroup>
 
 </Project>

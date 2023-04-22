@@ -2,6 +2,7 @@
 {
     public enum TablePlayerAction
     {
+        None,
         Fold,
         Check,
         Call,

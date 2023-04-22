@@ -19,4 +19,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Domain.PokerRule\Domain.PokerRule.csproj" />
+  </ItemGroup>
+
 </Project>
