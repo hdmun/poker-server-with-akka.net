@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Domain.PokerRule.Extentions
 {
@@ -28,6 +29,25 @@ namespace Domain.PokerRule.Extentions
         public static int FindIndex<T>(this T[] array, Predicate<T> predicate)
         {
             return Array.FindIndex(array, predicate);
+        }
+
+        public static int FindIndex<T>(this T[] array, int startIndex, Predicate<T> predicate)
+        {
+            return Array.FindIndex(array, startIndex, predicate);
+        }
+
+        public static int FindIndex<T>(this T[] array, int startIndex, int count, Predicate<T> predicate)
+        {
+            return Array.FindIndex(array, startIndex, count, predicate);
+        }
+
+        public static IEnumerable<T> ForEachFully<T>(this T[] array, int start)
+        {
+            for (int i = start; i < array.Length; i++)
+                yield return array[i];
+
+            for (int i = 0; i < start; i++)
+                yield return array[i];
         }
     }
 }
