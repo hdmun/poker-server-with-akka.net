@@ -1,4 +1,5 @@
-﻿using Domain.PokerRule.Enums;
+﻿using Domain.PokerRule.Data;
+using Domain.PokerRule.Enums;
 
 namespace Domain.PokerRule.Components
 {
@@ -8,6 +9,7 @@ namespace Domain.PokerRule.Components
         public required int Stack { get; set; }
         public required int BetChips { get; set; }
         public required TablePlayerAction LastAction { get; set; }
+        public (Card, Card) Hand { get; set; }
 
         public static TablePlayerComponent Of(int playerId)
         {

@@ -1,7 +1,9 @@
 ﻿using Domain.PokerRule.Components;
+using Domain.PokerRule.Data;
 using Domain.PokerRule.Entities;
 using Domain.PokerRule.Extentions;
 using System.Collections.Concurrent;
+using System.Linq;
 
 namespace Domain.PokerRule.Systems
 {
@@ -23,9 +25,15 @@ namespace Domain.PokerRule.Systems
             }
         }
 
+        private HoldemTableEntity GetTableEntity(int tableId)
+        {
+            return HoldemTables.TryGetValue(tableId, out var table) ? table : default;
+        }
+
         public bool AddPlayer(int tableId, int playerId, int position)
         {
-            if (!HoldemTables.TryGetValue(tableId, out var table))
+            var table = GetTableEntity(tableId);
+            if (table == null)
             {
                 return false;
             }
@@ -46,12 +54,13 @@ namespace Domain.PokerRule.Systems
 
         public bool RemovePlayer(int tableId, long playerId)
         {
-            if (!HoldemTables.TryGetValue(tableId, out var table))
+            var table = GetTableEntity(tableId);
+            if (table == null)
             {
                 return false;
             }
 
-            var index = table.Players.FindIndex(x => x.Id == playerId);
+            var index = table.Players.FindIndex(x => x?.Id == playerId);
             if (index < 0)
             {
                 return false;
@@ -59,6 +68,39 @@ namespace Domain.PokerRule.Systems
 
             table.Players[index] = null;
             return true;
+        }
+
+        public void Start(int tableId)
+        {
+            var tableEntity = GetTableEntity(tableId);
+            if (tableEntity == null)
+            {
+                return;
+            }
+
+            if (tableEntity.PlayerCount < 2)
+            {
+                return;
+            }
+
+            var tableComponent = tableEntity.Table;
+
+            // card shuflle
+            tableComponent.GetNextCard = ClosureFunctions.GetFuncArrayShuffler(Card.Cards);
+
+            // change dealer btn
+            int position = tableComponent.GetNextPosition(tableEntity.Players);
+
+            // distribute card
+            var activePlayers = tableEntity.Players
+                .Where(x => x != null)
+                .ForEachFully(position);
+            foreach (var player in activePlayers)
+            {
+                player.Hand = (tableComponent.GetNextCard(), tableComponent.GetNextCard());
+            }
+
+            tableComponent.ActionPlayerId = activePlayers.First().Id;
         }
     }
 }
