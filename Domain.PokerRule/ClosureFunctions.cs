@@ -1,5 +1,4 @@
-﻿using Domain.PokerRule.Data;
-using Domain.PokerRule.Extentions;
+﻿using Domain.PokerRule.Extentions;
 using System;
 using System.Linq;
 
@@ -26,7 +25,7 @@ namespace Domain.PokerRule
 
         public static Func<T> GetFuncArrayShuffler<T>(T[] array)
         {
-            var shuffleIdx = Enumerable.Range(0, Card.DeckCount)
+            var shuffleIdx = Enumerable.Range(0, array.Length)
                 .ToArray()
                 .Shuffle()
                 .AsEnumerable()
